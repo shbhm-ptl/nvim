@@ -5,7 +5,7 @@
 
 ## Installation🎨
 ```shell
-git clone https://github.com/Laughing-q/nvim.git ~/.config/nvim
+git clone https://github.com/shbhm-ptl/nvim.git ~/.config/nvim
 cd ~/.config/nvim
 ./install.sh
 ```
@@ -242,3 +242,6 @@ If you guys want `hjkl` style, just checkout branch `hjkl`. I actually don't tes
 - [https://github.com/NvChad/NvChad](https://github.com/NvChad/NvChad)
 - [https://github.com/LunarVim/LunarVim](https://github.com/LunarVim/LunarVim)
 - [https://github.com/theniceboy/nvim](https://github.com/theniceboy/nvim)
+
+## Credits🙏
+This config is a fork of [Laughing-q/nvim](https://github.com/Laughing-q/nvim). All credit for the original design and structure goes to its author.
