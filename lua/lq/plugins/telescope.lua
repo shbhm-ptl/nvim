@@ -11,37 +11,26 @@ return {
 				"nvim-tree/nvim-web-devicons",
 			},
 			{
-				"ahmedkhalf/project.nvim",    -- need this plugin for now to find git root for telescope searching
+				-- Maintained fork of ahmedkhalf/project.nvim (upstream is abandoned and
+				-- calls the deprecated vim.lsp.buf_get_clients(), which flashes a red
+				-- warning on startup with Neovim 0.12+). Same module name, drop-in.
+				"DrKJeff16/project.nvim", -- need this plugin for now to find git root for telescope searching
 				config = function()
-					require("project_nvim").setup({
-						---@usage set to true to disable setting the current-woriking directory
+					-- NOTE: the fork's module is `project` (not `project_nvim`)
+					require("project").setup({
 						--- Manual mode doesn't automatically change your root directory, so you have
-						--- the option to manually do so using `:ProjectRoot` command.
-						manual_mode = false, -- null-ls will disturb this when set `false`, but i'am not using null-ls.
+						--- the option to manually do so using the `:ProjectRoot` command.
+						manual_mode = false,
 
-						---@usage Methods of detecting the root directory
-						--- Allowed values: **"lsp"** uses the native neovim lsp
-						--- **"pattern"** uses vim-rooter like glob pattern matching. Here
-						--- order matters: if one is not detected, the other is used as fallback. You
-						--- can also delete or rearangne the detection methods.
-						detection_methods = { "lsp", "pattern" },
-
-						---@usage patterns used to detect root dir, when **"pattern"** is in detection_methods
+						-- patterns used to detect the project root (vim-rooter style);
+						-- LSP-based detection is also on by default (see `lsp` option)
 						patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
 
-						---@ Show hidden files in telescope when searching for files in a project
+						-- Show hidden files in telescope when searching for files in a project
 						show_hidden = false,
 
-						---@usage When set to false, you will get a message when project.nvim changes your directory.
-						-- When set to false, you will get a message when project.nvim changes your directory.
+						-- When set to false, you get a message whenever project.nvim changes directory
 						silent_chdir = true,
-
-						---@usage list of lsp client names to ignore when using **lsp** detection. eg: { "efm", ... }
-						ignore_lsp = {},
-
-						---@type string
-						---@usage path to store the project history for use in telescope
-						datapath = vim.fn.stdpath("cache"),
 					})
 				end,
 			},

@@ -1,21 +1,17 @@
--- replace the default lsp diagnostic symbols
-local signs = { Error = " ", Warn = " ", Hint = "󰌵 ", Info = " " }
-for type, icon in pairs(signs) do
-	local hl = "DiagnosticSign" .. type
-	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-end
-
--- Customizing how diagnostics are displayed
-local config = {
+-- Diagnostic display: custom icons in the sign column + rounded float
+-- (uses the modern vim.diagnostic.config API; the old sign_define /
+-- signs.active / vim.lsp.with approaches are deprecated in Neovim 0.10+)
+vim.diagnostic.config({
 	-- disable virtual text
 	virtual_text = false,
-	-- virtual_text = {
-	--    prefix = "",
-	--    spacing = 0,
-	-- },
-	-- show signs
+	-- custom icons in the sign column
 	signs = {
-		active = signs,
+		text = {
+			[vim.diagnostic.severity.ERROR] = " ",
+			[vim.diagnostic.severity.WARN] = " ",
+			[vim.diagnostic.severity.HINT] = "󰌵 ",
+			[vim.diagnostic.severity.INFO] = " ",
+		},
 	},
 	update_in_insert = true,
 	underline = true,
@@ -24,21 +20,30 @@ local config = {
 		focusable = false,
 		style = "minimal",
 		border = "rounded",
-		source = "always",
+		source = true,
 		header = "",
 		prefix = "",
 	},
-}
-vim.diagnostic.config(config)
+})
 
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-	border = "single",
-})
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-	focusable = true,
-	style = "minimal",
-	border = "rounded",
-})
+-- Bordered LSP floats. vim.lsp.with() was removed in favour of passing the
+-- window options directly to vim.lsp.buf.hover() / signature_help(), so wrap
+-- them once here and every caller (keymaps, plugins) gets the same style.
+local hover = vim.lsp.buf.hover
+---@diagnostic disable-next-line: duplicate-set-field
+vim.lsp.buf.hover = function(opts)
+	return hover(vim.tbl_deep_extend("force", { border = "single" }, opts or {}))
+end
+
+local signature_help = vim.lsp.buf.signature_help
+---@diagnostic disable-next-line: duplicate-set-field
+vim.lsp.buf.signature_help = function(opts)
+	return signature_help(vim.tbl_deep_extend("force", {
+		focusable = true,
+		style = "minimal",
+		border = "rounded",
+	}, opts or {}))
+end
 
 -- suppress error messages from lang servers
 vim.notify = function(msg, log_level, _opts)
@@ -46,7 +51,7 @@ vim.notify = function(msg, log_level, _opts)
 		return
 	end
 	if log_level == vim.log.levels.ERROR then
-		vim.api.nvim_err_writeln(msg)
+		vim.api.nvim_echo({ { msg } }, true, { err = true })
 	else
 		vim.api.nvim_echo({ { msg } }, true, {})
 	end
