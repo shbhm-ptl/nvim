@@ -1,6 +1,8 @@
 return {
 	{
 		"lukas-reineke/indent-blankline.nvim",
+		-- replaced by snacks.nvim's animated indent guides
+		enabled = false,
 		event = "VimEnter",
 		config = function()
 			require("ibl").setup({
