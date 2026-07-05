@@ -1,6 +1,8 @@
 vim.log
 plugin/packer_compiled.lua
 *.out
-lazy-lock.json
+# NOTE: lazy-lock.json is intentionally tracked — it pins plugin versions so
+# a fresh install reproduces a known-good setup (losing it once meant
+# nvim-treesitter silently jumped to its incompatible `main` rewrite).
 plugin/keymappings.lua.laughingq-orig
 doc/tags

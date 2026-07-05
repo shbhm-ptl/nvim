@@ -1,9 +1,13 @@
 return {
 	{ -- Additional text objects via treesitter
 		"nvim-treesitter/nvim-treesitter-textobjects",
+		-- The `main` branch is a rewrite with a different API; this config uses
+		-- the frozen-but-stable `master` API (require("nvim-treesitter.configs")).
+		branch = "master",
 		event = "VimEnter",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
+			branch = "master", -- ditto: main branch removed nvim-treesitter.configs
 			build = ":TSUpdate",
 			event = "VimEnter",
 			config = function()
@@ -39,12 +43,13 @@ return {
 							lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
 							keymaps = {
 								-- You can use the capture groups defined in textobjects.scm
+								-- standard a/i prefixes: a = around, i = inner (like aw/iw)
 								["aa"] = "@parameter.outer",
-								["ha"] = "@parameter.inner",
+								["ia"] = "@parameter.inner",
 								["af"] = "@function.outer",
-								["hf"] = "@function.inner",
+								["if"] = "@function.inner",
 								["ac"] = "@class.outer",
-								["hc"] = "@class.inner",
+								["ic"] = "@class.inner",
 							},
 						},
 						move = {
