@@ -2,38 +2,21 @@ local map = vim.keymap.set
 
 vim.g.mapleader = " " --leader
 -------------base mappings---------------
--- cursor movement
-map("", "i", "k")
-map("", "k", "j")
-map("", "j", "h")
-map("", "h", "i")
-map("", "gi", "gk")
-map("", "gk", "gj")
-map("", "gh", "gi")
-
-map("", "H", "I")
+-- stock hjkl movement; arrow keys also work
 
 -- enter, quit and save
-map("n", "O", "o<ESC>")
 map("n", "Q", ":q<CR>")
 map("n", "S", ":w <CR>")
 
--- fast home and end
-map("n", "<C-l>", "$")
--- ignore the return sign
-map("v", "<C-l>", "$h")
-map("", "<C-j>", "_")
-
 -- insert moving
-map("i", "<A-j>", "<Left>")
-map("i", "<C-l>", "<End>")
+map("i", "<A-h>", "<Left>")
+map("i", "<A-j>", "<Down>")
+map("i", "<A-k>", "<Up>")
 map("i", "<A-l>", "<Right>")
-map("i", "<A-i>", "<Up>")
-map("i", "<A-k>", "<Down>")
-map("i", "<C-j>", "<ESC>^i")
+map("i", "<C-l>", "<End>")
 
 --terminal
-map("n", "tek", ":execute 16 .. 'new +terminal' | let b:term_type = 'hori' | startinsert <CR>")
+map("n", "tej", ":execute 16 .. 'new +terminal' | let b:term_type = 'hori' | startinsert <CR>")
 map("n", "tel", ":execute 'vnew +terminal' | let b:term_type = 'vert' | startinsert <CR>")
 map("t", "JK", "<C-\\><C-n><C-w>w")
 
@@ -44,16 +27,16 @@ map("v", ">", ">gv")
 map("v", "<", "<gv")
 
 -- move line
-map("v", "<A-k>", ":m '>+1<CR>gv-gv")
-map("v", "<A-i>", ":m '<-2<CR>gv-gv")
-map("n", "<A-k>", ":m .+1<CR>==")
-map("n", "<A-i>", ":m .-2<CR>==")
+map("v", "<A-j>", ":m '>+1<CR>gv-gv")
+map("v", "<A-k>", ":m '<-2<CR>gv-gv")
+map("n", "<A-j>", ":m .+1<CR>==")
+map("n", "<A-k>", ":m .-2<CR>==")
 
--- Resize the arrows
-map("n", "<Up>", ":resize -1<CR>")
-map("n", "<Down>", ":resize +1<CR>")
-map("n", "<Left>", ":vertical resize -1<CR>")
-map("n", "<Right>", ":vertical resize +1<CR>")
+-- resize with ctrl+arrows (plain arrows move the cursor)
+map("n", "<C-Up>", ":resize -1<CR>")
+map("n", "<C-Down>", ":resize +1<CR>")
+map("n", "<C-Left>", ":vertical resize -1<CR>")
+map("n", "<C-Right>", ":vertical resize +1<CR>")
 
 -- move up/down the view port without moving the cursor
 map("n", "<C-Y>", "5<C-y>") -- rarely used
@@ -66,18 +49,15 @@ map("n", "N", "Nzz")
 -- use ESC to turn off search highlighting
 map("n", "<Esc>", ":noh <CR>")
 
--- split window
+-- split window (key = direction the new window opens)
 map("n", "s", "<nop>")
+map("n", "sh", ":set nosplitright<CR>:vsplit<CR>:set splitright<CR>")
+map("n", "sj", ":set splitbelow<CR>:split<CR>")
+map("n", "sk", ":set nosplitbelow<CR>:split<CR>:set splitbelow<CR>")
 map("n", "sl", ":set splitright<CR>:vsplit<CR>")
-map("n", "sk", ":set splitbelow<CR>:split<CR>")
-map("n", "sj", ":set nosplitright<CR>:vsplit<CR>:set splitright<CR>")
-map("n", "si", ":set nosplitbelow<CR>:split<CR>:set splitbelow<CR>")
 
--- window jump
-map("n", "J", "<C-w>h")
-map("n", "L", "<C-w>l")
-map("n", "I", "<C-w>k")
-map("n", "K", "<C-w>j")
+-- window jump: <C-h/j/k/l> via vim-tmux-navigator (see plugins/basic.lua),
+-- works across nvim splits and tmux panes with the same keys
 
 -- spell and warp
 map("n", "sw", ":set wrap!<CR>")
@@ -99,9 +79,6 @@ map("n", "]t", "<cmd>lnext<CR>zz")
 -- comment
 map("n", "<LEADER>c", "gcc", { remap = true })
 map("v", "<LEADER>c", "gc", { remap = true })
-
--- mark
-map("n", "M", "`")
 
 -- personal test file
 local function goto_test_file()
@@ -127,9 +104,6 @@ local function goto_test_file()
 	vim.cmd("normal! zz")
 end
 map("n", "g1", goto_test_file)
-
--- enforce reload
-map("n", "<C-R>", ":e!<CR>")
 
 -- make buffer executable
 map("n", "<leader>x", ":!chmod +x %<CR>")

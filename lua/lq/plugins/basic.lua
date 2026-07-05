@@ -7,6 +7,18 @@ return {
 		end,
 	},
 
+	-- seamless window jumps across nvim splits and tmux panes
+	{
+		"christoomey/vim-tmux-navigator",
+		cmd = { "TmuxNavigateLeft", "TmuxNavigateDown", "TmuxNavigateUp", "TmuxNavigateRight" },
+		keys = {
+			{ "<C-h>", "<cmd>TmuxNavigateLeft<CR>", desc = "Window left" },
+			{ "<C-j>", "<cmd>TmuxNavigateDown<CR>", desc = "Window down" },
+			{ "<C-k>", "<cmd>TmuxNavigateUp<CR>", desc = "Window up" },
+			{ "<C-l>", "<cmd>TmuxNavigateRight<CR>", desc = "Window right" },
+		},
+	},
+
 	{
 		"lewis6991/gitsigns.nvim",
 		event = "VeryLazy",

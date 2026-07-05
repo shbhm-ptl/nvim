@@ -54,9 +54,8 @@ telescope.setup({
 		buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
 		mappings = {
 			i = {
-				["<C-k>"] = actions.move_selection_next,
-				["<C-i>"] = actions.move_selection_previous,
-				["<tab>"] = actions.move_selection_previous,
+				["<C-j>"] = actions.move_selection_next,
+				["<C-k>"] = actions.move_selection_previous,
 				["<C-c>"] = actions.close,
 				["<C-n>"] = actions.cycle_history_next,
 				["<C-p>"] = actions.cycle_history_prev,
@@ -68,11 +67,7 @@ telescope.setup({
 				["<C-p>"] = actions.move_selection_previous,
 				["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
 				["<M-l>"] = action_layout.toggle_preview,
-
-				["k"] = actions.move_selection_next,
-				["i"] = actions.move_selection_previous,
 				-- ["<c-t>"] = trouble.open_with_trouble,
-				-- ["<C-i>"] = my_cool_custom_action,
 			},
 		},
 	},
