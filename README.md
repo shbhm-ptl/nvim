@@ -28,9 +28,30 @@ yay -S ripgrep
 ```
 
 ## Keymappings💻
-I'm not a native `vim` user, I'm used to using direction keys to move instead of `hjkl`(but maybe I'll be there soon), so my keymappings are based on `i(Up`)、`k(Down`)、`l(Right`)、`j(Left)` for now.
 
-If you guys want `hjkl` style, just checkout branch `hjkl`. I actually don't test it all, but it will work.
+> **Standardized keymaps.** Core movement and editing use *stock* Vim, so the
+> muscle memory transfers anywhere:
+> - **Move:** `h` `j` `k` `l` (+ arrow keys)
+> - **Save / quit:** `:w` / `:q` (or `Ctrl-S` to save)
+> - **Split windows:** `Ctrl-w s` (horizontal), `Ctrl-w v` (vertical)
+> - **Indent:** `>>` / `<<`, or `>` / `<` as operators (e.g. `>ap`)
+> - **Substitute:** `s` (char) / `S` (line) — stock behaviour
+>
+> Custom conveniences are on non-conflicting keys: `Ctrl-S` save, `Alt-j`/`Alt-k`
+> move line, `Ctrl-arrows` resize splits, `<leader>x` chmod +x, `<leader>p` paste
+> without yanking. Plugin keys: `U` undotree, `gr` LSP finder, `gD` definition in
+> split, `gw` toggle word, `<leader>k…` CopilotChat.
+>
+> **Press `<Space>` (the leader key) and pause** — [which-key](https://github.com/folke/which-key.nvim)
+> pops up every available shortcut. That's your best way to learn/discover the LSP
+> (`<leader>l…`), git (`<leader>g…`), and find (`<leader>f…`) menus.
+>
+> See [`plugin/keymappings.lua`](./plugin/keymappings.lua) and
+> [`lua/lq/configs/which-key.lua`](./lua/lq/configs/which-key.lua) for the full set.
+
+<details>
+<summary>Older reference tables (may be out of date)</summary>
+
 ### Base mappings⌨️
 - base
   | shortcut        | action                                                    | Equivalent    | mode        |
@@ -236,7 +257,8 @@ If you guys want `hjkl` style, just checkout branch `hjkl`. I actually don't tes
 
 
 - `<leader>` = `<space>`
-- More details see [mappings.lua](./lua/keymappings.lua) and [which-key.lua](./lua/plugins/configs/which-key.lua)
+
+</details>
 
 ## Reference🍔
 - [https://github.com/NvChad/NvChad](https://github.com/NvChad/NvChad)

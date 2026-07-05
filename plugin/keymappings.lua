@@ -1,153 +1,96 @@
 local map = vim.keymap.set
 
-vim.g.mapleader = " " --leader
--------------base mappings---------------
--- stock hjkl movement; arrow keys also work
+vim.g.mapleader = " " -- leader = <Space>
 
--- enter, quit and save
-map("n", "Q", ":q<CR>")
-map("n", "S", ":w <CR>")
+-- =============================================================================
+-- STANDARDIZED CORE KEYS
+-- Movement and core editing are stock Vim, so the muscle memory you build here
+-- works in any Vim/Neovim, anywhere:
+--   * move:            h j k l   (+ arrow keys)
+--   * save / quit:     :w   :q     (also <C-s> to save, below)
+--   * split windows:   <C-w>s (horizontal)   <C-w>v (vertical)
+--   * indent:          >>  <<   for a line, or > / < as operators (e.g. >ap, >j)
+--   * substitute:      s  (char)   S (line)   — back to stock behaviour
+-- Nothing below retrains a standard key; it's leader / Alt / Ctrl conveniences
+-- and access to the plugins you use.
+-- =============================================================================
 
--- insert moving
+-- Clear search highlight with <Esc>
+map("n", "<Esc>", "<cmd>nohlsearch<CR>")
+
+-- Ctrl-S to save (works like every other editor; doesn't shadow a Vim motion)
+map({ "n", "i", "v" }, "<C-s>", "<cmd>write<CR><Esc>", { desc = "Save file" })
+
+-- Keep the cursor centred when jumping around
+map("n", "<C-d>", "<C-d>zz")
+map("n", "<C-u>", "<C-u>zz")
+map("n", "n", "nzz")
+map("n", "N", "Nzz")
+
+-- Move the selected / current line up and down with Alt-j / Alt-k
+map("v", "<A-j>", ":m '>+1<CR>gv=gv")
+map("v", "<A-k>", ":m '<-2<CR>gv=gv")
+map("n", "<A-j>", ":m .+1<CR>==")
+map("n", "<A-k>", ":m .-2<CR>==")
+
+-- Keep the selection after indenting in visual mode (still the standard > / <)
+map("v", ">", ">gv")
+map("v", "<", "<gv")
+
+-- Paste over a selection without clobbering the yank register
+map("x", "<leader>p", '"_dP', { desc = "Paste without yanking selection" })
+
+-- Insert-mode arrow keys on the home row (optional convenience)
 map("i", "<A-h>", "<Left>")
 map("i", "<A-j>", "<Down>")
 map("i", "<A-k>", "<Up>")
 map("i", "<A-l>", "<Right>")
-map("i", "<C-l>", "<End>")
 
---terminal
-map("n", "tej", ":execute 16 .. 'new +terminal' | let b:term_type = 'hori' | startinsert <CR>")
-map("n", "tel", ":execute 'vnew +terminal' | let b:term_type = 'vert' | startinsert <CR>")
-map("t", "JK", "<C-\\><C-n><C-w>w")
+-- Resize splits with Ctrl + arrow keys
+map("n", "<C-Up>", "<cmd>resize -2<CR>", { desc = "Shrink window height" })
+map("n", "<C-Down>", "<cmd>resize +2<CR>", { desc = "Grow window height" })
+map("n", "<C-Left>", "<cmd>vertical resize -2<CR>", { desc = "Shrink window width" })
+map("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { desc = "Grow window width" })
 
--- indent
-map("n", ">", ">>")
-map("n", "<", "<<")
-map("v", ">", ">gv")
-map("v", "<", "<gv")
+-- Window jump: <C-h/j/k/l> via vim-tmux-navigator (see plugins/basic.lua),
+-- works across nvim splits and tmux panes with the same keys.
 
--- move line
-map("v", "<A-j>", ":m '>+1<CR>gv-gv")
-map("v", "<A-k>", ":m '<-2<CR>gv-gv")
-map("n", "<A-j>", ":m .+1<CR>==")
-map("n", "<A-k>", ":m .-2<CR>==")
+-- Make the current file executable
+map("n", "<leader>x", "<cmd>!chmod +x %<CR>", { desc = "chmod +x current file", silent = true })
 
--- resize with ctrl+arrows (plain arrows move the cursor)
-map("n", "<C-Up>", ":resize -1<CR>")
-map("n", "<C-Down>", ":resize +1<CR>")
-map("n", "<C-Left>", ":vertical resize -1<CR>")
-map("n", "<C-Right>", ":vertical resize +1<CR>")
-
--- move up/down the view port without moving the cursor
-map("n", "<C-Y>", "5<C-y>") -- rarely used
-map("n", "<C-E>", "5<C-e>")
-map("n", "<C-D>", "<C-D>zz")
-map("n", "<C-U>", "<C-U>zz")
-map("n", "n", "nzz")
-map("n", "N", "Nzz")
-
--- use ESC to turn off search highlighting
-map("n", "<Esc>", ":noh <CR>")
-
--- split window (key = direction the new window opens)
-map("n", "s", "<nop>")
-map("n", "sh", ":set nosplitright<CR>:vsplit<CR>:set splitright<CR>")
-map("n", "sj", ":set splitbelow<CR>:split<CR>")
-map("n", "sk", ":set nosplitbelow<CR>:split<CR>:set splitbelow<CR>")
-map("n", "sl", ":set splitright<CR>:vsplit<CR>")
-
--- window jump: <C-h/j/k/l> via vim-tmux-navigator (see plugins/basic.lua),
--- works across nvim splits and tmux panes with the same keys
-
--- spell and warp
-map("n", "sw", ":set wrap!<CR>")
-map("n", "ss", ":set spell!<CR>")
-
--- file path(rarely used)
-map("n", "\\p", ":echo expand('%:p')<CR>")
-map("n", "\\w", ":pwd<CR>")
-
--- <++>
-map("n", "<LEADER><LEADER>", '<Esc>/<++><CR>:nohlsearch<CR>"_c4l')
-
-map("x", "<leader>p", '"_dP')
-
--- location list
+-- Location-list navigation
 map("n", "[t", "<cmd>lprev<CR>zz")
 map("n", "]t", "<cmd>lnext<CR>zz")
 
--- comment
-map("n", "<LEADER>c", "gcc", { remap = true })
-map("v", "<LEADER>c", "gc", { remap = true })
+-- =============================================================================
+-- PLUGIN KEYS (unchanged — the plugins you use, on their usual keys)
+-- =============================================================================
 
--- personal test file
-local function goto_test_file()
-	local buf_dir = vim.fn.expand("%:p:h")
-	local git_root =
-		vim.trim(vim.fn.system("git -C " .. vim.fn.shellescape(buf_dir) .. " rev-parse --show-toplevel 2>/dev/null"))
-
-	local base_dir
-	if vim.v.shell_error == 0 and git_root ~= "" then
-		base_dir = git_root
-	else
-		base_dir = buf_dir
-	end
-
-	local target
-	if vim.fn.isdirectory(base_dir .. "/runs") == 1 then
-		target = base_dir .. "/runs/1.py"
-	else
-		target = base_dir .. "/1.py"
-	end
-
-	vim.cmd("e " .. vim.fn.fnameescape(target))
-	vim.cmd("normal! zz")
-end
-map("n", "g1", goto_test_file)
-
--- make buffer executable
-map("n", "<leader>x", ":!chmod +x %<CR>")
-
--------------plugins mappings---------------
--- tmux
-map("n", "<C-G>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
-
--- swith true and false
-map("n", "gw", ":Antovim<CR>")
+-- Comment.nvim
+map("n", "<leader>c", "gcc", { remap = true, desc = "Comment line" })
+map("v", "<leader>c", "gc", { remap = true, desc = "Comment selection" })
 
 -- undotree
-map("n", "U", ":UndotreeToggle<CR>")
+map("n", "U", "<cmd>UndotreeToggle<CR>", { desc = "Toggle undotree" })
+
+-- antovim: toggle words like true<->false
+map("n", "gw", "<cmd>Antovim<CR>", { desc = "Toggle word (true/false, etc.)" })
 
 -- lspsaga
-map("n", "gr", ":Lspsaga finder<CR>")
--- map("n", "gD", ":Lspsaga peek_definition<CR>")
-map("n", "gD", ":vsplit<CR>:lua vim.lsp.buf.definition()<CR>")
+map("n", "gr", "<cmd>Lspsaga finder<CR>", { desc = "LSP finder (references)" })
+map("n", "gD", "<cmd>vsplit<CR><cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Definition in split" })
 
--- copliot
-map("n", "<leader>kk", "<cmd>CopilotChat<CR>", { desc = "CopilotChat", nowait = true, remap = false })
-map(
-	{ "v", "n" },
-	"<leader>ke",
-	"<cmd>CopilotChatExplain<CR>",
-	{ desc = "CopilotExplain", nowait = true, remap = false }
-)
-map({ "v", "n" }, "<leader>kr", "<cmd>CopilotChatReview<CR>", { desc = "CopilotReview", nowait = true, remap = false })
-map({ "v", "n" }, "<leader>kf", "<cmd>CopilotChatFix<CR>", { desc = "CopilotFix", nowait = true, remap = false })
-map(
-	{ "v", "n" },
-	"<leader>ko",
-	"<cmd>CopilotChatOptimize<CR>",
-	{ desc = "CopilotOptimize", nowait = true, remap = false }
-)
-map({ "v", "n" }, "<leader>kd", "<cmd>CopilotChatDocs<CR>", { desc = "CopilotDocs", nowait = true, remap = false })
-map({ "v", "n" }, "<leader>kt", "<cmd>CopilotChatTests<CR>", { desc = "CopilotTests", nowait = true, remap = false })
-map(
-	{ "v", "n" },
-	"<leader>kc",
-	"<cmd>CopilotChatCommit<CR>",
-	{ desc = "CopilotCommitInfo", nowait = true, remap = false }
-)
+-- CopilotChat
+map("n", "<leader>kk", "<cmd>CopilotChat<CR>", { desc = "CopilotChat", nowait = true })
+map({ "v", "n" }, "<leader>ke", "<cmd>CopilotChatExplain<CR>", { desc = "Copilot Explain", nowait = true })
+map({ "v", "n" }, "<leader>kr", "<cmd>CopilotChatReview<CR>", { desc = "Copilot Review", nowait = true })
+map({ "v", "n" }, "<leader>kf", "<cmd>CopilotChatFix<CR>", { desc = "Copilot Fix", nowait = true })
+map({ "v", "n" }, "<leader>ko", "<cmd>CopilotChatOptimize<CR>", { desc = "Copilot Optimize", nowait = true })
+map({ "v", "n" }, "<leader>kd", "<cmd>CopilotChatDocs<CR>", { desc = "Copilot Docs", nowait = true })
+map({ "v", "n" }, "<leader>kt", "<cmd>CopilotChatTests<CR>", { desc = "Copilot Tests", nowait = true })
+map({ "v", "n" }, "<leader>kc", "<cmd>CopilotChatCommit<CR>", { desc = "Copilot Commit msg", nowait = true })
 
+-- Treesitter class / function motions
 map("", "]c", "]]zz", { desc = "Next class start", nowait = true, remap = true })
 map("", "]f", "]mzz", { desc = "Next function start", nowait = true, remap = true })
 map("", "[c", "[[zz", { desc = "Previous class start", nowait = true, remap = true })

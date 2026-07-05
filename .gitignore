@@ -2,3 +2,4 @@ vim.log
 plugin/packer_compiled.lua
 *.out
 lazy-lock.json
+plugin/keymappings.lua.laughingq-orig
