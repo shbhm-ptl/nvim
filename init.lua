@@ -26,7 +26,7 @@ require("lazy").setup({ import = "lq/plugins" }, {
 })
 
 -- colorscheme
-local colorscheme = "kanagawa"
+local colorscheme = "catppuccin"
 local ok, _ = pcall(require, colorscheme)
 if ok then
 	vim.cmd("colorscheme " .. colorscheme)
