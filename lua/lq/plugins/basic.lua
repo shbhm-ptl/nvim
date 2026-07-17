@@ -7,6 +7,15 @@ return {
 		end,
 	},
 
+	-- session files for tmux-resurrect: run :Obsession once in a project and
+	-- Session.vim stays updated, so after a reboot tmux-resurrect relaunches
+	-- nvim with your windows/buffers restored (see @resurrect-strategy-nvim
+	-- in tmux.conf — dead config without this plugin)
+	{
+		"tpope/vim-obsession",
+		cmd = "Obsession",
+	},
+
 	-- seamless window jumps across nvim splits and tmux panes
 	{
 		"christoomey/vim-tmux-navigator",
