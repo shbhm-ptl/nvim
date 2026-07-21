@@ -130,9 +130,37 @@ vim.lsp.config("pyright", {
 })
 vim.lsp.enable("pyright")
 
+-- ruff: fast linting + import sorting + quick fixes, via its native `ruff
+-- server` (the old ruff-lsp Python wrapper is deprecated). ruff has no
+-- meaningful hover, so disable it to let pyright's hover win instead of
+-- both popping up.
+vim.lsp.config("ruff", {
+	on_attach = function(client, bufnr)
+		client.server_capabilities.hoverProvider = false
+		M.on_attach(client, bufnr)
+	end,
+	capabilities = M.capabilities,
+})
+vim.lsp.enable("ruff")
+
+-- clangd: also cover CUDA (.cu/.cuh) so C++/CUDA files get the same
+-- background index, clang-tidy checks, and header-insertion behavior.
+-- Without a project compile_commands.json (see cmake-tools.lua) clangd
+-- falls back to guessed flags, so CUDA-specific headers may still show as
+-- unresolved until a build is generated once.
 vim.lsp.config("clangd", {
 	on_attach = M.on_attach,
 	capabilities = M.capabilities,
+	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+	cmd = {
+		"clangd",
+		"--background-index",
+		"--clang-tidy",
+		"--header-insertion=iwyu",
+		"--completion-style=detailed",
+		"--function-arg-placeholders",
+		"--fallback-style=Microsoft",
+	},
 })
 vim.lsp.enable("clangd")
 

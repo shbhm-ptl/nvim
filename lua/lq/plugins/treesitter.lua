@@ -14,11 +14,12 @@ return {
 				require("nvim-treesitter.configs").setup({
 					ensure_installed = {
 						"python",
-						-- "c",
-						-- "cpp",
-						-- "cmake",
+						"c",
+						"cpp",
+						"cmake",
 						-- "make",
-						-- "cuda",
+						-- there is no separate "cuda" grammar; .cu/.cuh files
+						-- are registered to reuse the cpp parser below
 						"dockerfile",
 						"lua",
 						"vim",
@@ -83,8 +84,13 @@ return {
 						},
 					},
 				})
+
+				-- CUDA C++ has no dedicated treesitter grammar; reuse the cpp
+				-- one so .cu/.cuh files still get highlighting and textobjects
+				vim.treesitter.language.register("cpp", "cuda")
 			end,
 			dependencies = { "nvim-lua/plenary.nvim" },
 		},
 	},
 }
+

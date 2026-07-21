@@ -59,7 +59,15 @@ leader_key = {
 			nowait = true,
 			remap = false,
 		},
-		{ "<leader>lf", "<cmd>call Format()<CR>zz", desc = "Format", nowait = true, remap = false },
+		{
+			"<leader>lf",
+			function()
+				require("conform").format({ async = true, lsp_format = "fallback" })
+			end,
+			desc = "Format",
+			nowait = true,
+			remap = false,
+		},
 		{ "<leader>lh", "<cmd>LspInfo<cr>", desc = "Info", nowait = true, remap = false },
 		{ "<leader>ll", "<cmd>LspStop<cr>", desc = "Close LSP", nowait = true, remap = false },
 		{ "<leader>lq", vim.diagnostic.setloclist, desc = "Quickfix", nowait = true, remap = false },
@@ -80,6 +88,12 @@ leader_key = {
 		{ "<leader>R", "<cmd>call RunPytestUnderCursor()<CR>", desc = "Run pytest under cursor", nowait = true, remap = false },
 		-- functions and values
 		{ "<leader>v", "<cmd>Lspsaga outline<CR>", desc = "Lspsaga outline", nowait = true, remap = false },
+
+		-- Debug (nvim-dap) and CMake keys are registered directly on their
+		-- plugin specs (lua/lq/plugins/dap.lua, cmake-tools.lua); which-key
+		-- picks those up automatically. Only the group labels live here.
+		{ "<leader>d", group = "Debug", nowait = true, remap = false },
+		{ "<leader>c", group = "CMake", nowait = true, remap = false },
 	},
 }
 
