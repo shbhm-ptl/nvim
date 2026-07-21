@@ -143,15 +143,18 @@ vim.lsp.config("ruff", {
 })
 vim.lsp.enable("ruff")
 
--- clangd: also cover CUDA (.cu/.cuh) so C++/CUDA files get the same
--- background index, clang-tidy checks, and header-insertion behavior.
--- Without a project compile_commands.json (see cmake-tools.lua) clangd
--- falls back to guessed flags, so CUDA-specific headers may still show as
--- unresolved until a build is generated once.
+-- clangd deliberately does NOT cover "cuda" (.cu/.cuh). Tried it: with no
+-- NVIDIA GPU/CUDA toolkit on Apple Silicon, clangd can't find cuda_runtime.h,
+-- which cascades into "unknown type __global__", "undeclared blockIdx" etc.
+-- for every CUDA builtin, then a hard "too many errors" abort - and once
+-- that happens, further requests on the file come back as `-32001 invalid
+-- AST`. There's no local fix (NVIDIA dropped macOS CUDA support entirely),
+-- so .cu/.cuh get treesitter highlighting only (see treesitter.lua) and
+-- real compiler feedback happens on the remote GPU box, same as building.
 vim.lsp.config("clangd", {
 	on_attach = M.on_attach,
 	capabilities = M.capabilities,
-	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+	filetypes = { "c", "cpp", "objc", "objcpp", "proto" },
 	cmd = {
 		"clangd",
 		"--background-index",
