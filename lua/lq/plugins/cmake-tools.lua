@@ -6,12 +6,14 @@ return {
 		"Civitasv/cmake-tools.nvim",
 		dependencies = { "nvim-lua/plenary.nvim", "mfussenegger/nvim-dap" },
 		cmd = { "CMakeGenerate", "CMakeBuild", "CMakeRun", "CMakeDebug", "CMakeSelectBuildType" },
+		-- <leader>m = "Make/cMake" prefix. (<leader>c is already your comment
+		-- command, so the CMake build keys live under m instead.)
 		keys = {
-			{ "<leader>cg", "<cmd>CMakeGenerate<CR>", desc = "CMake Generate" },
-			{ "<leader>cb", "<cmd>CMakeBuild<CR>", desc = "CMake Build" },
-			{ "<leader>cr", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
-			{ "<leader>cd", "<cmd>CMakeDebug<CR>", desc = "CMake Debug" },
-			{ "<leader>ct", "<cmd>CMakeSelectBuildType<CR>", desc = "CMake Build Type" },
+			{ "<leader>mg", "<cmd>CMakeGenerate<CR>", desc = "CMake Generate" },
+			{ "<leader>mb", "<cmd>CMakeBuild<CR>", desc = "CMake Build" },
+			{ "<leader>mr", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
+			{ "<leader>md", "<cmd>CMakeDebug<CR>", desc = "CMake Debug" },
+			{ "<leader>mt", "<cmd>CMakeSelectBuildType<CR>", desc = "CMake Build Type" },
 		},
 		opts = {
 			cmake_build_directory = "build",

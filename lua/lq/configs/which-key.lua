@@ -92,8 +92,8 @@ leader_key = {
 		-- Debug (nvim-dap) and CMake keys are registered directly on their
 		-- plugin specs (lua/lq/plugins/dap.lua, cmake-tools.lua); which-key
 		-- picks those up automatically. Only the group labels live here.
-		{ "<leader>d", group = "Debug", nowait = true, remap = false },
-		{ "<leader>c", group = "CMake", nowait = true, remap = false },
+		{ "<leader>b", group = "Debug (breakpoints)", nowait = true, remap = false },
+		{ "<leader>m", group = "Make / CMake", nowait = true, remap = false },
 	},
 }
 

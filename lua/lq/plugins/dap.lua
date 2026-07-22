@@ -28,17 +28,19 @@ return {
 			{ "<F10>", function() require("dap").step_over() end, desc = "Debug: Step Over" },
 			{ "<F11>", function() require("dap").step_into() end, desc = "Debug: Step Into" },
 			{ "<F12>", function() require("dap").step_out() end, desc = "Debug: Step Out" },
-			{ "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
-			{ "<leader>dc", function() require("dap").continue() end, desc = "Continue" },
+			-- <leader>b = "debug/Breakpoint" prefix. (<leader>d is already your
+			-- Trouble diagnostics toggle, so debug keys live under b instead.)
+			{ "<leader>bb", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
+			{ "<leader>bc", function() require("dap").continue() end, desc = "Continue" },
 			{
-				"<leader>dB",
+				"<leader>bB",
 				function() require("dap").set_breakpoint(vim.fn.input("Condition: ")) end,
 				desc = "Conditional Breakpoint",
 			},
-			{ "<leader>dr", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
-			{ "<leader>dl", function() require("dap").run_last() end, desc = "Run Last" },
-			{ "<leader>du", function() require("dapui").toggle() end, desc = "Toggle DAP UI" },
-			{ "<leader>dt", function() require("dap").terminate() end, desc = "Terminate" },
+			{ "<leader>br", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
+			{ "<leader>bl", function() require("dap").run_last() end, desc = "Run Last" },
+			{ "<leader>bu", function() require("dapui").toggle() end, desc = "Toggle DAP UI" },
+			{ "<leader>bt", function() require("dap").terminate() end, desc = "Terminate" },
 		},
 		config = function()
 			local dap = require("dap")
